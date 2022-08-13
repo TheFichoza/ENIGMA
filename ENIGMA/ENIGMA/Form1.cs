@@ -27,7 +27,7 @@ namespace ENIGMA
         Rotor5 = { { 0, 16 }, { 1, 22 }, { 2, 4 }, { 3, 17 }, { 4, 19 }, { 5, 25 }, { 6, 20 }, { 7, 8 }, { 8, 14 }, { 9, 0 }, { 10, 18 }, { 11, 3 }, { 12, 5 }, { 13, 6 }, { 14, 7 }, { 15, 9 }, { 16, 10 }, { 17, 15 }, { 18, 24 }, { 19, 23 }, { 20, 2 }, { 21, 21 }, { 22, 1 }, { 23, 13 }, { 24, 12 }, { 25, 11 } },
             R1, R2, R3;
         int[] Reflector = { 24, 17, 20, 7, 16, 18, 11, 3, 15, 23, 13, 6, 14, 10, 12, 8, 4, 1, 5, 25, 2, 22, 21, 9, 0, 19 }, histogram = new int[26];
-        List<Plug> plugs = new List<Plug>();
+        Plugboard plugs = new Plugboard();
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -75,16 +75,13 @@ namespace ENIGMA
         private void button8_Click(object sender, EventArgs e)
         {
             string s = textBox2.Text;
-            char a = s[0], b = s[2];
-            foreach (Plug plug in plugs)
-            {
-                if (plug.Contains(a, b)) throw new ArgumentException("Невалидни връзки!");
-            }
-            plugs.Add(new Plug(a, b)); listBox2.Items.Add(plugs[plugs.Count-1].ToString());
+            plugs.AddPlug(s); 
+            listBox2.Items.Add(s);
+            textBox2.Clear();
         }
         private void button9_Click(object sender, EventArgs e)
         {
-            plugs = new List<Plug>();
+            plugs = new Plugboard();
             listBox2.Items.Clear();
         }
 
@@ -189,17 +186,11 @@ namespace ENIGMA
                 char sym = symbol;
                 if (symbol > 96 && symbol < 123) sym = (char)((int)sym - 32);
                 else if (symbol < 65 || symbol > 90) { cypher += symbol; continue; }
-                for (int i = 0; i < plugs.Count; i++)
-                {
-                    if (sym != plugs[i].Connect(sym)) { sym = plugs[i].Connect(sym); break; }
-                }
                 trans = (int)sym - 65;
+                trans = plugs.Connect(trans);
                 trans = Encrypt(trans);
+                trans = plugs.Connect(trans);
                 encrypted = (char)(trans + 65);
-                for (int i = 0; i < plugs.Count; i++)
-                {
-                    if (encrypted != plugs[i].Connect(encrypted)) { encrypted = plugs[i].Connect(encrypted); break; }
-                }
                 if (symbol > 96 && symbol < 123) encrypted = (char)((int)encrypted + 32);
                 cypher += encrypted;
             }
