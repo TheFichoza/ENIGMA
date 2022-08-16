@@ -8,22 +8,32 @@ namespace ENIGMA
 {
     class Rotor
     {
-        private int[,] mapping;
+        private int[] forward, reverse;
         private int position;
         public Rotor(int num, int pos)
         {
             switch (num)
             {
                 case 1:
-                    mapping = RotorSelection.Rotor1; break;
+                    forward = RotorSelection.forward1;
+                    reverse = RotorSelection.reverse1;
+                    break;
                 case 2:
-                    mapping = RotorSelection.Rotor2; break;
+                    forward = RotorSelection.forward2;
+                    reverse = RotorSelection.reverse2;
+                    break;
                 case 3:
-                    mapping = RotorSelection.Rotor3; break;
+                    forward = RotorSelection.forward3;
+                    reverse = RotorSelection.reverse3;
+                    break;
                 case 4:
-                    mapping = RotorSelection.Rotor4; break;
+                    forward = RotorSelection.forward4;
+                    reverse = RotorSelection.forward4;
+                    break;
                 case 5:
-                    mapping = RotorSelection.Rotor5; break;
+                    forward = RotorSelection.forward5;
+                    reverse = RotorSelection.reverse5;
+                    break;
                 default:
                     throw new IndexOutOfRangeException("Invalid Rotor");
             }
@@ -31,20 +41,11 @@ namespace ENIGMA
         }
         public int Forward(int element)
         {
-            return (mapping[(element+position)%26, 1]-position+26)%26;
+            return (forward[(element + position) % 26] - position + 26) % 26;
         }       
         public int Back(int element)
         {
-            element = (element+position)%26;
-            for (int i = 0; i < 26; i++)
-            {
-                if (mapping[i, 1] == element) 
-                {
-                    element = mapping[i, 0]; break; 
-                }
-            }
-            element = (element - position + 26) % 26;
-            return element;
+            return (reverse[(element + position) % 26] - position + 26) % 26;
         }
         public void TurnOver()
         {
