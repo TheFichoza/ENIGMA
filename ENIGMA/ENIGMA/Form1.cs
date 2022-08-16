@@ -104,9 +104,7 @@ namespace ENIGMA
         }
         public int Decrease(int input, int inc)
         {
-            input-= inc;
-            if (input < 0) input += 26;
-            return input;
+            return (26 + input - inc)%26;
         }
         public int Forward(int input)
         {
@@ -152,7 +150,7 @@ namespace ENIGMA
             histogram[trans]++;
             return trans;
         }
-        public int[,] Check(int a)
+        public int[,] Check(int a)//No longer Exists
         {
             switch(a)
             {
@@ -172,29 +170,38 @@ namespace ENIGMA
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            richTextBox3.Text = "";
+            richTextBox3.Clear();
             int a = int.Parse(comboBox1.Text), b = int.Parse(comboBox2.Text), c = int.Parse(comboBox3.Text);
+            int[] rotorConfig = { a, b, c }, rotorPosition = {r1, r2, r3};
+            Enigma enigma = new Enigma(rotorConfig, rotorPosition);
             if (a == b || a == c || b == c) throw new ArgumentException("Overlapping values!");
             R1 = Check(a);
             R2 = Check(b);
             R3 = Check(c);
-            string normal = richTextBox2.Text, cypher = "";
-            char encrypted;
+            string normal = richTextBox2.Text, cypher = "", strTest = "";
+            char encrypted, test;
             int trans;
             foreach (char symbol in normal)
             {
                 char sym = symbol;
-                if (symbol > 96 && symbol < 123) sym = (char)((int)sym - 32);
+                if (symbol > 96 && symbol < 123) sym = (char)(sym - 32);
                 else if (symbol < 65 || symbol > 90) { cypher += symbol; continue; }
-                trans = (int)sym - 65;
-                trans = plugs.Connect(trans);
-                trans = Encrypt(trans);
-                trans = plugs.Connect(trans);
-                encrypted = (char)(trans + 65);
-                if (symbol > 96 && symbol < 123) encrypted = (char)((int)encrypted + 32);
-                cypher += encrypted;
+                test = enigma.Encrypt(sym);
+                //trans = sym - 65;
+                //trans = plugs.Connect(trans);
+                //trans = Encrypt(trans);
+                //trans = plugs.Connect(trans);
+                //encrypted = (char)(trans + 65);
+                if (symbol > 96 && symbol < 123) 
+                {
+                    //encrypted = (char)(encrypted + 32);
+                    test = (char)(test + 32); 
+                }
+                //cypher += encrypted;
+                strTest += test;
             }
-            richTextBox3.Text = cypher;
+            //richTextBox3.Text = cypher;
+              richTextBox3.Text = strTest;
         }
 
         //DECRYPTION

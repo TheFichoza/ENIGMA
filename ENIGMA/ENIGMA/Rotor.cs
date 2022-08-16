@@ -9,8 +9,8 @@ namespace ENIGMA
     class Rotor
     {
         private int[,] mapping;
-        int position;
-        public Rotor(int num)
+        private int position;
+        public Rotor(int num, int pos)
         {
             switch (num)
             {
@@ -27,6 +27,32 @@ namespace ENIGMA
                 default:
                     throw new IndexOutOfRangeException("Invalid Rotor");
             }
+            position = pos;
+        }
+        public int Forward(int element)
+        {
+            return (mapping[(element+position)%26, 1]-position+26)%26;
+        }       
+        public int Back(int element)
+        {
+            element = (element+position)%26;
+            for (int i = 0; i < 26; i++)
+            {
+                if (mapping[i, 1] == element) 
+                {
+                    element = mapping[i, 0]; break; 
+                }
+            }
+            element = (element - position + 26) % 26;
+            return element;
+        }
+        public void TurnOver()
+        {
+            position = (position + 1) % 26;
+        }
+        public bool Notch()
+        {
+            return position == 25;
         }
     }
 }
