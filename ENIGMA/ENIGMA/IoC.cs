@@ -9,8 +9,18 @@ namespace ENIGMA
     class Key
     {
         private int[] rotor_config, start_position = new int[3];
-        public decimal ioc;
-        public Key(int[] rotor_config,int[] positions, int[] histogram)
+        public double ioc;
+        private string text;
+        public Key(int[] rotor_config,int[] positions, int[] histogram, string text)
+        {
+            this.rotor_config = rotor_config;
+            start_position[0] = positions[0];
+            start_position[1] = positions[1];
+            start_position[2] = positions[2];
+            ioc = IoC(histogram);
+            this.text = text;
+        }
+        public Key(int[] rotor_config, int[] positions, int[] histogram)
         {
             this.rotor_config = rotor_config;
             start_position[0] = positions[0];
@@ -30,12 +40,13 @@ namespace ENIGMA
                 if (histogram[i] != 0) output += (histogram[i] * (histogram[i] - 1));
             }
             output /= (histogram.Sum()*(histogram.Sum()-1));
-            output =Math.Abs(output - 0.067);
+            output = Math.Round(output, 7);
+            output = Math.Abs(output - 0.067);
             return output;
         }
         public override string ToString()
         {
-            return $"({string.Join(", ", rotor_config)}): {string.Join(", ", start_position)} - {ioc}{Environment.NewLine}";
+            return $"({string.Join(", ", rotor_config)}): {string.Join(", ", start_position.Select(x => x + 1))} - {ioc}\n\n{text}";
         }
     }
 }

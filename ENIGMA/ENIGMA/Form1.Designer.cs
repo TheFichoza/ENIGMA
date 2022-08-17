@@ -49,12 +49,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
             this.button10 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -214,9 +214,9 @@
             // listBox2
             // 
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(459, 264);
+            this.listBox2.Location = new System.Drawing.Point(449, 264);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(49, 108);
+            this.listBox2.Size = new System.Drawing.Size(82, 108);
             this.listBox2.TabIndex = 16;
             // 
             // button8
@@ -296,6 +296,23 @@
             this.tabPage1.Text = "Шифриране";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Location = new System.Drawing.Point(6, 179);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.ReadOnly = true;
+            this.richTextBox3.Size = new System.Drawing.Size(437, 96);
+            this.richTextBox3.TabIndex = 22;
+            this.richTextBox3.Text = "";
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Location = new System.Drawing.Point(6, 49);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(191, 81);
+            this.richTextBox2.TabIndex = 21;
+            this.richTextBox2.Text = "";
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.richTextBox4);
@@ -308,6 +325,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Дешифриране";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox4
+            // 
+            this.richTextBox4.Location = new System.Drawing.Point(23, 170);
+            this.richTextBox4.Name = "richTextBox4";
+            this.richTextBox4.ReadOnly = true;
+            this.richTextBox4.Size = new System.Drawing.Size(417, 208);
+            this.richTextBox4.TabIndex = 2;
+            this.richTextBox4.Text = "";
             // 
             // button10
             // 
@@ -326,32 +352,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(417, 96);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
-            // 
-            // richTextBox2
-            // 
-            this.richTextBox2.Location = new System.Drawing.Point(6, 49);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(191, 81);
-            this.richTextBox2.TabIndex = 21;
-            this.richTextBox2.Text = "";
-            // 
-            // richTextBox3
-            // 
-            this.richTextBox3.Location = new System.Drawing.Point(6, 179);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.ReadOnly = true;
-            this.richTextBox3.Size = new System.Drawing.Size(437, 96);
-            this.richTextBox3.TabIndex = 22;
-            this.richTextBox3.Text = "";
-            // 
-            // richTextBox4
-            // 
-            this.richTextBox4.Location = new System.Drawing.Point(23, 170);
-            this.richTextBox4.Name = "richTextBox4";
-            this.richTextBox4.ReadOnly = true;
-            this.richTextBox4.Size = new System.Drawing.Size(417, 208);
-            this.richTextBox4.TabIndex = 2;
-            this.richTextBox4.Text = "";
             // 
             // Form1
             // 

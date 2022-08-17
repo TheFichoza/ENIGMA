@@ -89,10 +89,11 @@ namespace ENIGMA
         //DECRYPTION
         private void button10_Click(object sender, EventArgs e)
         {
-            string start = richTextBox1.Text, format = "", decrypted = "";
+            string start = richTextBox1.Text, format = "";
             int[] rotor_config = { 1, 2, 3 };
             char decSym;
-            Key min = new Key();
+            Key min = new Key(), temp;
+            Enigma enigma;
             histogram = new int[26];
             /*Dictionary<string, decimal> quad = new Dictionary<string, decimal>();
             foreach (string line in System.IO.File.ReadLines(@"D:\ENIGMA/quadgrams-short (2).txt"))
@@ -113,20 +114,20 @@ namespace ENIGMA
                     for (int test1 = 0; test1 < 26; test1++)
                     {
                         int[] positions = { test1, test2, test3 };
-                        Enigma enigma = new Enigma(rotor_config, positions);
+                        enigma = new Enigma(rotor_config, positions);
                         foreach (char sym in format)
                         {
                             decSym = enigma.Encrypt(sym);
-                            
+                            histogram[decSym - 65]++;
                         }
-                        //Key temp = new Key(rotor_config, positions,histogram);
-                        //if (temp.ioc < min.ioc) { min = temp; richTextBox4.Text += min.ToString(); }
-                        //histogram = new int[26];
-                        richTextBox4.Text = string.Join
+                        temp = new Key(rotor_config, positions,histogram);
+                        if (temp.ioc < min.ioc) { min = temp;}
+                        histogram = new int[26];
                     }
                 }
+                richTextBox4.Text += $"test3 = {test3}";
             }
-            richTextBox4.Text += $"BEST - {min.ToString()}";
+            richTextBox4.Text = $"BEST - {min.ToString()}";
         }
     }
 }
