@@ -55,6 +55,7 @@
             this.richTextBox4 = new System.Windows.Forms.RichTextBox();
             this.button10 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.button11 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -315,6 +316,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button11);
             this.tabPage2.Controls.Add(this.richTextBox4);
             this.tabPage2.Controls.Add(this.button10);
             this.tabPage2.Controls.Add(this.richTextBox1);
@@ -352,6 +354,16 @@
             this.richTextBox1.Size = new System.Drawing.Size(417, 96);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(446, 191);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(75, 23);
+            this.button11.TabIndex = 3;
+            this.button11.Text = "button11";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // Form1
             // 
@@ -398,6 +410,7 @@
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.RichTextBox richTextBox4;
+        private System.Windows.Forms.Button button11;
     }
 }
 

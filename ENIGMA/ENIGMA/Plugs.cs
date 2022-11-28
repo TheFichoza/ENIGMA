@@ -26,7 +26,7 @@ namespace ENIGMA
                 AddPlug(plug);
             }
         }
-        public string AddPlug(string conn)
+        public bool AddPlug(string conn)
         {
             if (Regex.IsMatch(conn, "^[A-Z]-[A-Z]$"))
             {
@@ -34,21 +34,22 @@ namespace ENIGMA
                 symbol2 = conn[2] - 65;
                 if (maps.Count < limit)
                 {
-                    if (usedChars.Contains(symbol1) || usedChars.Contains(symbol2))
-                    {
-                        return "Character already connected!";
-                    }
-                    else
+                    if (!(usedChars.Contains(symbol1) || usedChars.Contains(symbol2)))
                     {
                         usedChars.Add(symbol1);
                         usedChars.Add(symbol2);
                         maps[symbol1] = symbol2;
-                        return "Successfully added";
+                        return true;
                     }
                 }
-                else return "Too many connections!";
             }
-            else return "Invalid plug format!";
+            return false;
+        }
+        public void RemoveLastPlug()
+        {
+            usedChars.Remove(maps.LastOrDefault().Key);
+            usedChars.Remove(maps.LastOrDefault().Value);
+            maps.Remove(maps.LastOrDefault().Key);
         }
         public int Connect(int symbol)
         {

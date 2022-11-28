@@ -17,9 +17,11 @@ namespace ENIGMA
             InitializeComponent();
         }
 
-        //MAIN STUCTURE AND ENCRYPTION
+        //VARIABLES
         int r1 = 0, r2 = 0, r3 = 0;
         int[] histogram = new int[26];
+        public static int[,] vars = { { 1, 2, 3 }, { 1, 2, 4 }, { 1, 2, 5 }, { 1, 3, 2 }, { 1, 3, 4 }, { 1, 3, 5 }, { 1, 4, 2 }, { 1, 4, 3 }, { 1, 4, 5 }, { 1, 5, 2 }, { 1, 5, 3 }, { 1, 5, 4 }, { 2, 1, 3 }, { 2, 1, 4 }, { 2, 1, 5 }, { 2, 3, 1 }, { 2, 3, 4 }, { 2, 3, 5 }, { 2, 4, 1 }, { 2, 4, 3 }, { 2, 4, 5 }, { 2, 5, 1 }, { 2, 5, 3 }, { 2, 5, 4 }, { 3, 1, 2 }, { 3, 1, 4 }, { 3, 1, 5 }, { 3, 2, 1 }, { 3, 2, 4 }, { 3, 2, 5 }, { 3, 4, 1 }, { 3, 4, 2 }, { 3, 4, 5 }, { 3, 5, 1 }, { 3, 5, 2 }, { 3, 5, 4 }, { 4, 1, 2 }, { 4, 1, 3 }, { 4, 1, 5 }, { 4, 2, 1 }, { 4, 2, 3 }, { 4, 2, 5 }, { 4, 3, 1 }, { 4, 3, 2 }, { 4, 3, 5 }, { 4, 5, 1 }, { 4, 5, 2 }, { 4, 5, 3 }, { 5, 1, 2 }, { 5, 1, 3 }, { 5, 1, 4 }, { 5, 2, 1 }, { 5, 2, 3 }, { 5, 2, 4 }, { 5, 3, 1 }, { 5, 3, 2 }, { 5, 3, 4 }, { 5, 4, 1 }, { 5, 4, 2 }, { 5, 4, 3 } };
+        //ROTOR FUNCTIONS
         private void button2_Click(object sender, EventArgs e)
         {
             r1 = (r1 + 1) % 26;
@@ -50,7 +52,7 @@ namespace ENIGMA
             r3 = (r3 - 1 + 26) % 26;
             label3.Text = (r3 + 1).ToString();
         }
-
+        //PLUGBOARD FUNC
         private void button8_Click(object sender, EventArgs e)
         {
             listBox2.Items.Add(textBox2.Text);
@@ -61,6 +63,7 @@ namespace ENIGMA
             listBox2.Items.Clear();
         }
 
+        //ENCYPTION
         private void button1_Click(object sender, EventArgs e)
         {
             richTextBox3.Clear();
@@ -87,47 +90,102 @@ namespace ENIGMA
         }
 
         //DECRYPTION
+        Dictionary<string, decimal> quad;
+        Key min;
+        decimal hillClimb;
         private void button10_Click(object sender, EventArgs e)
         {
-            string start = richTextBox1.Text, format = "";
-            int[] rotor_config = { 1, 2, 3 };
+            string start = richTextBox1.Text, format = "", decrypted = "";
             char decSym;
-            Key min = new Key(), temp;
+            min = new Key();
+            Key temp;
             Enigma enigma;
             histogram = new int[26];
-            /*Dictionary<string, decimal> quad = new Dictionary<string, decimal>();
-            foreach (string line in System.IO.File.ReadLines(@"D:\ENIGMA/quadgrams-short (2).txt"))
-            {
-                string[] a = line.Split(' ');
-                quad[a[0]] = decimal.Parse(a[1]);
-            }*/
-
             foreach (char sym in start)
             {
                 if (sym > 96 && sym < 123) format += (char)(sym - 32);
                 else if (sym > 64 && sym < 91) format += sym;
             }
-            for (int test3 = 0; test3 < 26; test3++)
+            for (int rotorConfigs = 0; rotorConfigs < 60; rotorConfigs++)
             {
-                for (int test2 = 0; test2 < 26; test2++)
+                int[] rotor_config = { vars[rotorConfigs, 0],vars[rotorConfigs, 1], vars[rotorConfigs, 2] };
+                for (int test3 = 0; test3 < 26; test3++)
                 {
-                    for (int test1 = 0; test1 < 26; test1++)
+                    for (int test2 = 0; test2 < 26; test2++)
                     {
-                        int[] positions = { test1, test2, test3 };
-                        enigma = new Enigma(rotor_config, positions);
-                        foreach (char sym in format)
+                        for (int test1 = 0; test1 < 26; test1++)
                         {
-                            decSym = enigma.Encrypt(sym);
-                            histogram[decSym - 65]++;
+                            decrypted = "";
+                            int[] positions = { test1, test2, test3 };
+                            enigma = new Enigma(rotor_config, positions);
+                            foreach (char sym in format)
+                            {
+                                decSym = enigma.Encrypt(sym);
+                                histogram[decSym - 65]++;
+                                decrypted += decSym;
+                            }
+                            temp = new Key(rotor_config, positions, histogram);
+                            if (temp.ioc < min.ioc) { min = temp; min.text = decrypted; }
+                            histogram = new int[26];
                         }
-                        temp = new Key(rotor_config, positions,histogram);
-                        if (temp.ioc < min.ioc) { min = temp;}
-                        histogram = new int[26];
                     }
                 }
-                richTextBox4.Text += $"test3 = {test3}";
             }
-            richTextBox4.Text = $"BEST - {min.ToString()}";
+            richTextBox4.Text = $"BEST - {min}";
+        }
+        
+        private void button11_Click(object sender, EventArgs e)
+        {
+            hillClimb = 0;
+            quad = new Dictionary<string, decimal>();
+            string[] fileLines = System.IO.File.ReadLines(@"D:\ENIGMA/quadgrams-short (2).txt").ToArray();
+            foreach (string line in fileLines)
+            {
+                string[] a = line.Split(' ');
+                quad[a[0]] = decimal.Parse(a[1]);
+            }
+            min.hillClimb = HillClimb(min.text);
+            Enigma enigma = new Enigma(min);
+            for(int count=0;count<3;count++)
+            {
+                bool changed = false;
+                for (char i = 'A'; i <= 'Z'; i++)
+                {
+                    for (char j = 'A'; j <= 'Z'; j++)
+                    {
+                        string text = "";
+                        if (enigma.plugboard.AddPlug($"{i}-{j}"))
+                        {
+                            foreach (var item in min.text)
+                            {
+                                text += enigma.Encrypt(item);
+                            }
+                            hillClimb = HillClimb(text);
+                            if (hillClimb > min.hillClimb)
+                            {
+                                min.hillClimb = hillClimb;
+                                min.plugboard[count] = $"{i}-{j}";
+                                min.text = text;
+                                changed = true;
+                            }
+                            enigma.plugboard.RemoveLastPlug();
+                        }
+                    }
+                }
+                if (!changed) break;
+            }
+
+        }
+        public decimal HillClimb(string text)
+        {
+            decimal Climb = 0;
+            for (int k = 0; k < text.Length - 4; k++)
+            {
+                string four = text.Substring(k, 4);
+                if (quad.ContainsKey(four)) Climb += quad[four];
+                else Climb += -6;
+            }
+            return Climb;
         }
     }
 }

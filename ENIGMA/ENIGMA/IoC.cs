@@ -8,9 +8,11 @@ namespace ENIGMA
 {
     class Key
     {
-        private int[] rotor_config, start_position = new int[3];
+        public int[] rotor_config = { 1, 2, 3 }, start_position = { 1, 1, 1 };
         public double ioc;
-        private string text;
+        public decimal hillClimb;
+        public string text;
+        public string[] plugboard = new string[3];
         public Key(int[] rotor_config,int[] positions, int[] histogram, string text)
         {
             this.rotor_config = rotor_config;
@@ -46,7 +48,7 @@ namespace ENIGMA
         }
         public override string ToString()
         {
-            return $"({string.Join(", ", rotor_config)}): {string.Join(", ", start_position.Select(x => x + 1))} - {ioc}\n\n{text}";
+            return $"({string.Join(", ", rotor_config)}): {string.Join(", ", start_position.Select(x => x + 1))} - {ioc}\n{string.Join(", ", plugboard)}\n\n{text}";
         }
     }
 }
