@@ -12,7 +12,7 @@ namespace ENIGMA
         public double ioc;
         public decimal hillClimb;
         public string text;
-        public string[] plugboard = new string[3];
+        public List<string> plugboard = new List<string>();
         public Key(int[] rotor_config,int[] positions, int[] histogram, string text)
         {
             this.rotor_config = rotor_config;

@@ -93,9 +93,11 @@ namespace ENIGMA
         Dictionary<string, decimal> quad;
         Key min;
         decimal hillClimb;
+        string format;
         private void button10_Click(object sender, EventArgs e)
         {
-            string start = richTextBox1.Text, format = "", decrypted = "";
+            string start = richTextBox1.Text;
+            format = "";
             char decSym;
             min = new Key();
             Key temp;
@@ -106,57 +108,68 @@ namespace ENIGMA
                 if (sym > 96 && sym < 123) format += (char)(sym - 32);
                 else if (sym > 64 && sym < 91) format += sym;
             }
+            
             for (int rotorConfigs = 0; rotorConfigs < 60; rotorConfigs++)
             {
                 int[] rotor_config = { vars[rotorConfigs, 0],vars[rotorConfigs, 1], vars[rotorConfigs, 2] };
+                enigma = new Enigma(rotor_config);
                 for (int test3 = 0; test3 < 26; test3++)
                 {
                     for (int test2 = 0; test2 < 26; test2++)
                     {
                         for (int test1 = 0; test1 < 26; test1++)
                         {
-                            decrypted = "";
                             int[] positions = { test1, test2, test3 };
-                            enigma = new Enigma(rotor_config, positions);
+                            enigma.SetPositons(positions);
                             foreach (char sym in format)
                             {
                                 decSym = enigma.Encrypt(sym);
                                 histogram[decSym - 65]++;
-                                decrypted += decSym;
                             }
                             temp = new Key(rotor_config, positions, histogram);
-                            if (temp.ioc < min.ioc) { min = temp; min.text = decrypted; }
+                            if (temp.ioc < min.ioc) { min = temp; }
                             histogram = new int[26];
                         }
                     }
                 }
             }
+            enigma = new Enigma(min);
+            foreach (var item in format)
+            {
+                min.text += enigma.Encrypt(item);
+            }
             richTextBox4.Text = $"BEST - {min}";
         }
-        
+
+
         private void button11_Click(object sender, EventArgs e)
         {
-            hillClimb = 0;
+            Enigma enigma;
             quad = new Dictionary<string, decimal>();
-            string[] fileLines = System.IO.File.ReadLines(@"D:\ENIGMA/quadgrams-short (2).txt").ToArray();
+            string[] fileLines = System.IO.File.ReadLines("quadgrams-short (2).txt").ToArray();
             foreach (string line in fileLines)
             {
                 string[] a = line.Split(' ');
                 quad[a[0]] = decimal.Parse(a[1]);
             }
             min.hillClimb = HillClimb(min.text);
-            Enigma enigma = new Enigma(min);
             for(int count=0;count<3;count++)
             {
                 bool changed = false;
                 for (char i = 'A'; i <= 'Z'; i++)
                 {
-                    for (char j = 'A'; j <= 'Z'; j++)
+                    for (char j = (char)(i+1); j <= 'Z'; j++)
                     {
+                        if ($"{i}{j}".Equals("CD"))
+                        {
+                            Console.WriteLine("asd");
+                        }
+                        string start = min.text;
+                        enigma = new Enigma(min);
                         string text = "";
                         if (enigma.plugboard.AddPlug($"{i}-{j}"))
                         {
-                            foreach (var item in min.text)
+                            foreach (var item in format)
                             {
                                 text += enigma.Encrypt(item);
                             }
@@ -164,6 +177,7 @@ namespace ENIGMA
                             if (hillClimb > min.hillClimb)
                             {
                                 min.hillClimb = hillClimb;
+                                if (min.plugboard.Count < count) min.plugboard.Add($"{i}-{j}");
                                 min.plugboard[count] = $"{i}-{j}";
                                 min.text = text;
                                 changed = true;
@@ -174,8 +188,9 @@ namespace ENIGMA
                 }
                 if (!changed) break;
             }
-
+            richTextBox4.Text = min.ToString();
         }
+
         public decimal HillClimb(string text)
         {
             decimal Climb = 0;

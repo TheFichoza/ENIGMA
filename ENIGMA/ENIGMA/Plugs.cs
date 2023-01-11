@@ -17,7 +17,7 @@ namespace ENIGMA
             usedChars = new HashSet<int>();
             maps = new Dictionary<int, int>();
         }
-        public Plugboard(string[] plugs)
+        public Plugboard(List<string> plugs)
         {
             usedChars = new HashSet<int>();
             maps = new Dictionary<int, int>();

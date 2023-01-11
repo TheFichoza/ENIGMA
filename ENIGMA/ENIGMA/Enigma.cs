@@ -16,13 +16,13 @@ namespace ENIGMA
             Rotor1 = new Rotor(rotorConfig[0], rotorPositions[0]);
             Rotor2 = new Rotor(rotorConfig[1], rotorPositions[1]);
             Rotor3 = new Rotor(rotorConfig[2], rotorPositions[2]);
-            plugboard = new Plugboard(plugList);
+            plugboard = new Plugboard(plugList.ToList());
         }
-        public Enigma(int[] rotorConfig, int[] rotorPositions)
+        public Enigma(int[] rotorConfig)
         {
-            Rotor1 = new Rotor(rotorConfig[0], rotorPositions[0]);
-            Rotor2 = new Rotor(rotorConfig[1], rotorPositions[1]);
-            Rotor3 = new Rotor(rotorConfig[2], rotorPositions[2]);
+            Rotor1 = new Rotor(rotorConfig[0]);
+            Rotor2 = new Rotor(rotorConfig[1]);
+            Rotor3 = new Rotor(rotorConfig[2]);
             plugboard = new Plugboard();
         }
         public Enigma(Key key)
@@ -30,7 +30,8 @@ namespace ENIGMA
             Rotor1 = new Rotor(key.rotor_config[0], key.start_position[0]);
             Rotor2 = new Rotor(key.rotor_config[1], key.start_position[1]);
             Rotor3 = new Rotor(key.rotor_config[2], key.start_position[2]);
-            plugboard = new Plugboard();
+            if (key.plugboard.Count != 0) plugboard = new Plugboard(key.plugboard);
+            else plugboard = new Plugboard();
         }
         public void Rotate()
         {
@@ -60,6 +61,12 @@ namespace ENIGMA
             trans = plugboard.Connect(trans);
             return (char)(trans + 65);
 
+        }
+        public void SetPositons(int[] rotorPositions)
+        {
+            Rotor1.Position = rotorPositions[0];
+            Rotor2.Position = rotorPositions[1];
+            Rotor3.Position = rotorPositions[2];
         }
     }
 }
