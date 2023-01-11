@@ -48,7 +48,7 @@ namespace ENIGMA
         }
         public override string ToString()
         {
-            return $"({string.Join(", ", rotor_config)}): {string.Join(", ", start_position.Select(x => x + 1))} - {ioc}\n{string.Join(", ", plugboard)}\n\n{text}";
+            return $"(CHOSEN ROTORS: {string.Join(", ", rotor_config)}\nPOSITIONS: {string.Join(", ", start_position.Select(x => x + 1))}\nPLUGS: {string.Join(", ", plugboard)}\n\n{text}";
         }
     }
 }

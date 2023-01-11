@@ -138,7 +138,8 @@ namespace ENIGMA
             {
                 min.text += enigma.Encrypt(item);
             }
-            richTextBox4.Text = $"BEST - {min}";
+            richTextBox4.Text = $"BEST - {min.ioc}:\n{min}";
+            button11.Enabled = true;
         }
 
 
@@ -153,9 +154,7 @@ namespace ENIGMA
                 quad[a[0]] = decimal.Parse(a[1]);
             }
             min.hillClimb = HillClimb(min.text);
-            for(int count=0;count<3;count++)
-            {
-                bool changed = false;
+
                 for (char i = 'A'; i <= 'Z'; i++)
                 {
                     for (char j = (char)(i+1); j <= 'Z'; j++)
@@ -177,18 +176,15 @@ namespace ENIGMA
                             if (hillClimb > min.hillClimb)
                             {
                                 min.hillClimb = hillClimb;
-                                if (min.plugboard.Count < count) min.plugboard.Add($"{i}-{j}");
-                                min.plugboard[count] = $"{i}-{j}";
+                                min.plugboard.Add($"{i}-{j}");
                                 min.text = text;
-                                changed = true;
                             }
                             enigma.plugboard.RemoveLastPlug();
                         }
                     }
                 }
-                if (!changed) break;
-            }
             richTextBox4.Text = min.ToString();
+            button11.Enabled = false;
         }
 
         public decimal HillClimb(string text)
